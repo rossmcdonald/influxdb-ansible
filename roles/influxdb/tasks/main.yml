@@ -1,4 +1,10 @@
 ---
+  - name: Install any necessary dependencies
+    apt: name={{ item }} state=present update_cache=yes cache_valid_time=3600
+    with_items:
+      - python-httplib2
+      - python-apt
+
   # NOTE: This check assumes the /opt/influxdb/influx is a symlink
   - name: Check to make sure Influx isn't already present
     stat: path=/opt/influxdb/influx
