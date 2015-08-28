@@ -10,7 +10,7 @@ In the root directory of this repository, you should find the following files:
 - `roles/` => This is where the individual Ansible roles are stored (just influxdb in this case).
 - `run-playbook.sh` => This is a helper script for getting started deploying the playbook. Usage for this script is described later, but assumes that your inventory is located in a 'hosts' file in the root directory of the repo.
 - `pull-test-data.sh` => This is another helper script that will be used to verify our installation once it's completed.
-- `requirements.txt` => Our pinned python dependencies. Can be installed using `pip`.
+- `requirements.txt` => Our pinned python dependencies. Can be installed using `pip`. For this experiment, we are using Ansible 1.9.2.
 
 ## Installing Ansible
 
