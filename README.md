@@ -41,7 +41,7 @@ $ ./pull-test-data.sh localhost
 
 ## Deploying InfluxDB
 
-Once all of our dependencies are met, we are ready to deploy Influx to a remote server. Since Ansible uses SSH, all you need to know if how to connect to your remote server. For example, to deploy Influx to a Digital Ocean droplet (wink wink):
+Once all of our dependencies are met, we are ready to deploy Influx to a remote server. Since Ansible uses SSH, all you need to know is how to connect to your remote server. For example, to deploy Influx to a Digital Ocean droplet (wink wink):
 
 
 ```
