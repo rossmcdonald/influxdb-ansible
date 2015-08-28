@@ -5,4 +5,4 @@
 # - There is a 'random_ints' series with data loaded into it
 # - Python is installed (>= v2.6 for json module)
 
-curl -s -G http://localhost:8086/query --data-urlencode "db=my_sample_db" --data-urlencode "q=SELECT * FROM random_ints" | python -mjson.tool
+curl -s -G http://$1:8086/query --data-urlencode "db=my_sample_db" --data-urlencode "q=SELECT * FROM random_ints" | python -mjson.tool
