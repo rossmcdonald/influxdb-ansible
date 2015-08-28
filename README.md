@@ -134,13 +134,11 @@ $ curl -G 'http://localhost:8086/query' --data-urlencode "db=<db name>" --data-u
 ```
 
 More information about the HTTP API endpoint can be found here:
-
-https://influxdb.com/docs/v0.9/guides/writing_data.html
-https://influxdb.com/docs/v0.9/guides/querying_data.html
+- https://influxdb.com/docs/v0.9/guides/writing_data.html
+- https://influxdb.com/docs/v0.9/guides/querying_data.html
 
 In addition to the HTTP API, the Influx shell can also be used to interact with the database (either locally or remote). For more information about Influx Shell commands, please see the full documentation here:
-
-https://influxdb.com/docs/v0.9/tools/shell.html
+- https://influxdb.com/docs/v0.9/tools/shell.html
 
 # Full Documentation
 
