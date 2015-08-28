@@ -39,7 +39,7 @@ Which should provision a VM, install InfluxDB, start the InfluxDB service, and l
 $ ./pull-test-data.sh localhost
 ```
 
-## Deploying InfluxDB
+## Deploying InfluxDB to a Remote Server
 
 Once all of our dependencies are met, we are ready to deploy Influx to a remote server. Since Ansible uses SSH, all you need to know is how to connect to your remote server. For example, to deploy Influx to a Digital Ocean droplet (wink wink):
 
@@ -90,6 +90,63 @@ Which should dump JSON output similar to:
     ]
 }
 ```
+
+## Verifying Installation
+
+To verify that InfluxDB is up and running correctly, you can utilize Influx's `/ping` HTTP endpoint:
+
+```
+$ curl -v http://<IP ADDRESS>:8086/ping
+* Hostname was NOT found in DNS cache
+*   Trying <IP ADDRESS>...
+* Connected to <IP ADDRESS> (<IP ADDRESS>) port 8086 (#0)
+> GET /ping HTTP/1.1
+> User-Agent: curl/7.37.1
+> Host: <IP ADDRESS>:8086
+> Accept: */*
+> 
+< HTTP/1.1 204 No Content
+< Request-Id: ff394228-4da3-11e5-8013-000000000000
+< X-Influxdb-Version: 0.9.2
+< Date: Fri, 28 Aug 2015 16:44:07 GMT
+< 
+* Connection #0 to host <IP ADDRESS> left intact
+```
+
+Which should generate a HTTP 204 return code and display the correct InfluxDB version when `curl`'d.
+
+## Loading Test Data
+
+The Ansible playbook will automatically load a small set of test data once the installation has been verified. If you would like to load data manually, you can use the following commands utilizing Influx's HTTP API endpoints:
+
+```
+# To add data into the existing 'random_ints' measurement, in the 'my_sample_db' database
+$ curl -i -XPOST 'http://<ip address>:8086/write?db=my_sample_db' --data-binary 'random_ints,host=server<RANDOM INT>,region=us-west value=<RANDOM INT>'
+
+# If you would like to create a new database to store measurements
+$ curl -G http://<ip address>:8086/query --data-urlencode "q=CREATE DATABASE <db name>"
+
+# And then write data to it
+$ curl -i -XPOST 'http://<ip address>:8086/write?db=<db name>' --data-binary '<measurement>[,<tags>] value=<value> [timestamp]'
+
+# And then to read data back
+$ curl -G 'http://localhost:8086/query' --data-urlencode "db=<db name>" --data-urlencode "q=SELECT value FROM <measurement> WHERE <tag key>=<tag value>"
+```
+
+More information about the HTTP API endpoint can be found here:
+
+https://influxdb.com/docs/v0.9/guides/writing_data.html
+https://influxdb.com/docs/v0.9/guides/querying_data.html
+
+In addition to the HTTP API, the Influx shell can also be used to interact with the database (either locally or remote). For more information about Influx Shell commands, please see the full documentation here:
+
+https://influxdb.com/docs/v0.9/tools/shell.html
+
+# Full Documentation
+
+For the full set of InfluxDB documentation, you can use the following link:
+
+https://influxdb.com/docs/v0.9/introduction/index.html
 
 # Considerations/Caveats
 
