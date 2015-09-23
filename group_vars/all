@@ -1,9 +1,0 @@
----
-
-# InfluxDB version to install (warning, this is somewhat tempermental due to naming conventions)
-influxdb_version: latest
-
-# TODO: Move these to an influx-specific var file
-# InfluxDB configuration file options
-disable_reporting: true
-enable_authentication: true

@@ -3,6 +3,7 @@
 
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
+  # config.vm.box = "box-cutter/fedora22"
   # config.vm.box = "puppetlabs/centos-6.6-64-nocm"
   # config.vm.box = "hansode/centos-6.5-x86_64"
 

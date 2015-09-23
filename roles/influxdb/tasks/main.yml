@@ -16,22 +16,24 @@
     command: curl -o /tmp/influx.deb http://influxdb.s3.amazonaws.com/influxdb_{{ influxdb_version }}_amd64.deb
     args:
       creates: /tmp/influx.deb
-    when: ansible_os_family == "Debian" and influx_installed.stat.islnk is not defined or ansible_os_family == "Debian" and influx_installed.stat.islnk == False
+    when: ansible_os_family == "Debian" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
 
+  # TODO: don't hardcode the RPM version
   - name: Download InfluxDB package (RHEL)
-    # command: curl -o /tmp/influx.rpm http://influxdb.s3.amazonaws.com/influxdb-0.9.4.1-1.x86_64.rpm
-    command: curl -o /tmp/influx.rpm http://get.influxdb.org.s3.amazonaws.com/influxdb-0.8.9-1.x86_64.rpm
+    command: curl -o /tmp/influx.rpm http://influxdb.s3.amazonaws.com/influxdb-0.9.4.1-1.x86_64.rpm
+    # command: curl -o /tmp/influx.rpm http://get.influxdb.org.s3.amazonaws.com/influxdb-0.8.9-1.x86_64.rpm
     args:
       creates: /tmp/influx.rpm
-    when: ansible_os_family == "RedHat" and influx_installed.stat.islnk is not defined or ansible_os_family == "RedHat" and influx_installed.stat.islnk == False
+    when: ansible_os_family == "RedHat" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
 
   - name: Install InfluxDB packages (Debian)
     apt: deb=/tmp/influx.deb
-    when: ansible_os_family == "Debian" and influx_installed.stat.islnk is not defined or ansible_os_family == "Debian" and influx_installed.stat.islnk == False
+    when: ansible_os_family == "Debian" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
 
+  # TODO: RHEL-variant systems are migrating to DNF, so this might fail on newer machines. Need logic to account for that.
   - name: Install InfluxDB packages (RHEL)
     yum: name=/tmp/influx.rpm state=present
-    when: ansible_os_family == "RedHat" and influx_installed.stat.islnk is not defined or ansible_os_family == "RedHat" and influx_installed.stat.islnk == False
+    when: ansible_os_family == "RedHat" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
     
   - name: Start the InfluxDB service
     service: name=influxdb state=started

@@ -16,14 +16,14 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [meta]
-  dir = "/var/opt/influxdb/meta"
-  hostname = "localhost"
-  bind-address = ":8088"
-  retention-autocreate = true
-  election-timeout = "1s"
-  heartbeat-timeout = "1s"
-  leader-lease-timeout = "500ms"
-  commit-timeout = "50ms"
+  dir = "{{ meta_dir }}"
+  hostname = "{{ meta_hostname }}"
+  bind-address = ":{{ meta_port }}"
+  retention-autocreate = {{ meta_retention_autocreate }}
+  election-timeout = "{{ meta_election_timeout }}"
+  heartbeat-timeout = "{{ meta_heartbeat_timeout }}"
+  leader-lease-timeout = "{{ meta_leader_lease_timeout }}"
+  commit-timeout = "{{ meta_commit_timeout }}"
 
 ###
 ### [data]
@@ -32,7 +32,7 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [data]
-  dir = "/var/opt/influxdb/data"
+  dir = "{{ data_dir }}"
 
 ###
 ### [cluster]
@@ -42,7 +42,7 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [cluster]
-  shard-writer-timeout = "5s"
+  shard-writer-timeout = "{{ cluster_shard_writer_timeout }}"
 
 ###
 ### [retention]
@@ -51,8 +51,8 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [retention]
-  enabled = true
-  check-interval = "10m"
+  enabled = {{ retention_enabled }}
+  check-interval = "{{ retention_check_interval }}"
 
 ###
 ### [admin]
@@ -61,8 +61,8 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [admin]
-  enabled = true
-  bind-address = ":8083"
+  enabled = {{ admin_enabled }}
+  bind-address = ":{{ admin_port }}"
 
 ###
 ### [http]
@@ -72,12 +72,12 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [http]
-  enabled = true
-  bind-address = ":8086"
+  enabled = {{ http_enabled }}
+  bind-address = ":{{ http_port }}"
   auth-enabled = {{ enable_authentication }}
-  log-enabled = true
-  write-tracing = false
-  pprof-enabled = false
+  log-enabled = {{ http_log_enabled }}
+  write-tracing = {{ http_write_tracing }}
+  pprof-enabled = {{ http_pprof_enabled }}
 
 ###
 ### [[graphite]]
@@ -135,8 +135,8 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [monitoring]
-  enabled = true
-  write-interval = "24h"
+  enabled = {{ monitoring_enabled }}
+  write-interval = "{{ monitoring_write_interval }}"
 
 ###
 ### [continuous_queries]
@@ -145,11 +145,11 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [continuous_queries]
-  enabled = true
-  recompute-previous-n = 2
-  recompute-no-older-than = "10m"
-  compute-runs-per-interval = 10
-  compute-no-more-than = "2m"
+  enabled = {{ cq_enabled }}
+  recompute-previous-n = {{ cq_recompute_previous_n }}
+  recompute-no-older-than = {{ cq_recompute_no_older_than }}
+  compute-runs-per-interval = {{ cq_compute_runs_per_interval }}
+  compute-no-more-than = "{{ cq_compute_no_more_than }}"
 
 ###
 ### [hinted-handoff]
@@ -160,9 +160,9 @@ reporting-disabled = {{ disable_reporting }}
 ###
 
 [hinted-handoff]
-  enabled = true
-  dir = "/var/opt/influxdb/hh"
-  max-size = 1073741824
-  max-age = "168h"
-  retry-rate-limit = 0
-  retry-interval = "1s"
+  enabled = {{ hh_enabled }}
+  dir = "{{ hh_dir }}"
+  max-size = {{ hh_max_size }}
+  max-age = "{{ hh_max_age }}"
+  retry-rate-limit = {{ hh_retry_rate_limit }}
+  retry-interval = "{{ hh_retry_interval }}"
