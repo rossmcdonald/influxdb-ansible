@@ -1,0 +1,24 @@
+---
+  - name: Install any necessary dependencies (Debian)
+    apt: name={{ item }} state=present update_cache=yes cache_valid_time=7200
+    with_items:
+      - python-apt
+      - curl
+      - apt-transport-https
+    when: ansible_os_family == "Debian"
+    
+  - name: Add the Grafana repository (Debian)
+    apt_repository: repo='deb https://packagecloud.io/grafana/stable/debian/ wheezy main' state=present update_cache=yes
+    when: ansible_os_family == "Debian"
+
+  # TODO: Specify key ID as a best practice (per Ansible documentation)
+  - name: Add the Grafana repository signing key (Debian)
+    apt_key: url=https://packagecloud.io/gpg.key state=present
+    when: ansible_os_family == "Debian"
+
+  - name: Install Grafana (Debian)
+    apt: name=grafana state=present update_cache=yes
+    when: ansible_os_family == "Debian" 
+    
+  - name: Start the InfluxDB service
+    service: name=grafana-server state=started enabled=yes

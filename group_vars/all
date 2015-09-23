@@ -1,0 +1,4 @@
+---
+
+# InfluxDB version to install (warning, this is somewhat tempermental due to naming conventions)
+influxdb_version: latest

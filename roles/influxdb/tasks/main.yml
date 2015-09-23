@@ -1,25 +1,38 @@
 ---
-  - name: Install any necessary dependencies
+  - name: Install any necessary dependencies (Debian)
     apt: name={{ item }} state=present update_cache=yes cache_valid_time=3600
     with_items:
       - python-httplib2
       - python-apt
+      - curl
+    when: ansible_os_family == "Debian"
 
   # NOTE: This check assumes the /opt/influxdb/influx is a symlink
-  - name: Check to make sure Influx isn't already present
+  - name: Check to make sure Influx isnt already present
     stat: path=/opt/influxdb/influx
     register: influx_installed
 
-  - name: Download InfluxDB package
-    command: curl -o /tmp/influx.deb http://influxdb.s3.amazonaws.com/influxdb_0.9.2_amd64.deb
+  - name: Download InfluxDB package (Debian)
+    command: curl -o /tmp/influx.deb http://influxdb.s3.amazonaws.com/influxdb_{{ influxdb_version }}_amd64.deb
     args:
       creates: /tmp/influx.deb
-    when: influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False
+    when: ansible_os_family == "Debian" and influx_installed.stat.islnk is not defined or ansible_os_family == "Debian" and influx_installed.stat.islnk == False
 
-  - name: Install InfluxDB packages (if not installed)
+  - name: Download InfluxDB package (RHEL)
+    # command: curl -o /tmp/influx.rpm http://influxdb.s3.amazonaws.com/influxdb-0.9.4.1-1.x86_64.rpm
+    command: curl -o /tmp/influx.rpm http://get.influxdb.org.s3.amazonaws.com/influxdb-0.8.9-1.x86_64.rpm
+    args:
+      creates: /tmp/influx.rpm
+    when: ansible_os_family == "RedHat" and influx_installed.stat.islnk is not defined or ansible_os_family == "RedHat" and influx_installed.stat.islnk == False
+
+  - name: Install InfluxDB packages (Debian)
     apt: deb=/tmp/influx.deb
-    when: influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False
+    when: ansible_os_family == "Debian" and influx_installed.stat.islnk is not defined or ansible_os_family == "Debian" and influx_installed.stat.islnk == False
 
+  - name: Install InfluxDB packages (RHEL)
+    yum: name=/tmp/influx.rpm state=present
+    when: ansible_os_family == "RedHat" and influx_installed.stat.islnk is not defined or ansible_os_family == "RedHat" and influx_installed.stat.islnk == False
+    
   - name: Start the InfluxDB service
     service: name=influxdb state=started
 
@@ -31,7 +44,7 @@
     command: /opt/influxdb/influx -execute 'show databases'
     register: db_listing
 
-  # TODO: Parameterize database name creation (instead of hardcoding)
+  # Todo: Parameterize database name creation (instead of hardcoding)
   - name: Create sample database
     command: /opt/influxdb/influx -execute 'CREATE DATABASE my_sample_db'
     when: db_listing.stdout.find("my_sample_db") == -1
