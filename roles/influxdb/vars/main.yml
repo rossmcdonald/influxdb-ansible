@@ -3,7 +3,7 @@
 # To get around this, make sure you quote any boolean values (true -> "true") to ensure correct formatting.
 
 # InfluxDB version to install (warning, this doesn't quite work right now due to naming conventions)
-influxdb_version: latest
+influxdb_version: 0.9.4.1
 
 # InfluxDB configuration file options
 disable_reporting: "true"
@@ -17,20 +17,46 @@ meta_election_timeout: 1s
 meta_heartbeat_timeout: 1s
 meta_leader_lease_timeout: 500ms
 meta_commit_timeout: 50ms
+meta_cluster_tracing: "false"
 
 ## Data Settings
 data_dir: /var/opt/influxdb/data
+data_max_wal_size: 104857600
+data_wal_flush_interval: 10m0s
+data_wal_partition_flush_delay: 2s
+data_wal_dir: /var/opt/influxdb/wal
+data_wal_logging_enabled: "true"
+data_wal_ready_series_size: 30720
+data_wal_compaction_threshold: 0.5
+data_wal_max_series_size: 1048576
+data_wal_flush_cold_interval: 5s
+data_wal_partition_size_threshold: 20971520
 
 ## Cluster Settings
 cluster_shard_writer_timeout: 5s
+cluster_force_remote_mapping: "false"
+cluster_write_timeout: 5s
+cluster_shard_mapper_timeout: 5s
 
 ## Retention Settings
 retention_enabled: "true"
-retention_check_interval: 10m
+retention_check_interval: 30m0s
+
+# Shard-Precreation Settings
+shard_pre_enabled: "true"
+shard_pre_check_interval: 10m0s
+shard_pre_advance_period: 30m0s
 
 ## Admin Settings
 admin_enabled: "true"
 admin_port: 8083
+admin_https_enabled: "false"
+admin_https_certificate: /etc/ssl/influxdb.pem
+
+## Monitor Settings (not to be confused with 'Monitoring')
+monitor_store_enabled: "true"
+monitor_store_database: _internal
+monitor_store_interval: 10s
 
 ## HTTP Settings
 http_enabled: "true"
@@ -39,6 +65,8 @@ http_auth_enabled: "false"
 http_log_enabled: "true"
 http_write_tracing: "true"
 http_pprof_enabled: "false"
+http_https_enabled: "false"
+http_https_certificate: /etc/ssl/influxdb.pem
 
 ## TODO Graphite Settings
 
@@ -53,6 +81,7 @@ monitoring_enabled: "true"
 monitoring_write_interval: 24h
 
 ## Continuous Queries Settings
+cq_log_enabled: "true"
 cq_enabled: "true"
 cq_recompute_previous_n: 2
 cq_recompute_no_older_than: 10m
