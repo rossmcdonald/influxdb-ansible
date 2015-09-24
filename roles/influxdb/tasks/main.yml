@@ -39,7 +39,7 @@
     template: src=influxdb.conf.j2 dest=/etc/opt/influxdb/influxdb.conf force=yes backup=yes owner=influxdb group=influxdb mode=0744
     
   - name: Start the InfluxDB service
-    service: name=influxdb state=started
+    service: name=influxdb state=started enabled=yes
 
   # TODO: Don't pause if the service was already started
   - name: Give the InfluxDB service a few seconds to fully start
