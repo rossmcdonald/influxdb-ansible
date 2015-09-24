@@ -74,7 +74,7 @@ reporting-disabled = {{ disable_reporting }}
 [http]
   enabled = {{ http_enabled }}
   bind-address = ":{{ http_port }}"
-  auth-enabled = {{ enable_authentication }}
+  auth-enabled = {{ http_auth_enabled }}
   log-enabled = {{ http_log_enabled }}
   write-tracing = {{ http_write_tracing }}
   pprof-enabled = {{ http_pprof_enabled }}
@@ -147,7 +147,7 @@ reporting-disabled = {{ disable_reporting }}
 [continuous_queries]
   enabled = {{ cq_enabled }}
   recompute-previous-n = {{ cq_recompute_previous_n }}
-  recompute-no-older-than = {{ cq_recompute_no_older_than }}
+  recompute-no-older-than = "{{ cq_recompute_no_older_than }}"
   compute-runs-per-interval = {{ cq_compute_runs_per_interval }}
   compute-no-more-than = "{{ cq_compute_no_more_than }}"
 

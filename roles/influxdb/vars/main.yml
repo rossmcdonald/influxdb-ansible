@@ -1,20 +1,22 @@
 ---
+# NOTE: Since Ansible uses Python on the backend, all boolean values are capitalized when being rendered (which is not valid TOML).
+# To get around this, make sure you quote any boolean values (true -> "true") to ensure correct formatting.
 
 # InfluxDB version to install (warning, this doesn't quite work right now due to naming conventions)
 influxdb_version: latest
 
 # InfluxDB configuration file options
-disable_reporting: true
+disable_reporting: "true"
 
 ## Meta Settings
 meta_dir: /var/opt/influxdb/meta
 meta_hostname: localhost
 meta_port: 8088
-meta_retention_autocreate: true
+meta_retention_autocreate: "true"
 meta_election_timeout: 1s
 meta_heartbeat_timeout: 1s
 meta_leader_lease_timeout: 500ms
-commit_timeout: 50ms
+meta_commit_timeout: 50ms
 
 ## Data Settings
 data_dir: /var/opt/influxdb/data
@@ -23,20 +25,20 @@ data_dir: /var/opt/influxdb/data
 cluster_shard_writer_timeout: 5s
 
 ## Retention Settings
-retention_enabled: true
+retention_enabled: "true"
 retention_check_interval: 10m
 
 ## Admin Settings
-admin_enabled: true
+admin_enabled: "true"
 admin_port: 8083
 
 ## HTTP Settings
-http_enabled: true
+http_enabled: "true"
 http_port: 8086
-http_auth_enabled: false
-http_log_enabled: true
-http_write_tracing: true
-http_pprof_enabled: false
+http_auth_enabled: "false"
+http_log_enabled: "true"
+http_write_tracing: "true"
+http_pprof_enabled: "false"
 
 ## TODO Graphite Settings
 
@@ -47,18 +49,18 @@ http_pprof_enabled: false
 ## TODO UDP Settings
 
 ## Monitoring Settings
-monitoring_enabled: true
+monitoring_enabled: "true"
 monitoring_write_interval: 24h
 
 ## Continuous Queries Settings
-cq_enabled: true
+cq_enabled: "true"
 cq_recompute_previous_n: 2
 cq_recompute_no_older_than: 10m
 cq_compute_runs_per_interval: 10
 cq_compute_no_more_than: 2m
 
 ## Hinted-Handoff Settings
-hh_enabled: true
+hh_enabled: "true"
 hh_dir: /var/opt/influxdb/hh
 hh_max_size: 1073741824
 hh_max_age: 168h

@@ -2,5 +2,5 @@
 - hosts: all
   sudo: yes
   roles:
-    - grafana
+    # - grafana
     - influxdb

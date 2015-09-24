@@ -34,6 +34,9 @@
   - name: Install InfluxDB packages (RHEL)
     yum: name=/tmp/influx.rpm state=present
     when: ansible_os_family == "RedHat" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
+
+  - name: Overwrite default configuration with parameterized template
+    template: src=influxdb.conf.j2 dest=/etc/opt/influxdb/influxdb.conf force=yes backup=yes owner=influxdb group=influxdb mode=0744
     
   - name: Start the InfluxDB service
     service: name=influxdb state=started
