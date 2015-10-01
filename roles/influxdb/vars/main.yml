@@ -1,9 +1,15 @@
 ---
-# NOTE: Since Ansible uses Python on the backend, all boolean values are capitalized when being rendered (which is not valid TOML).
-# To get around this, make sure you quote any boolean values (true -> "true") to ensure correct formatting.
+# Add sample data to InfluxDB after installation
+add_demo_data: false
+
+# Enable clustering
+clustering_enabled: true
 
 # InfluxDB version to install (warning, this doesn't quite work right now due to naming conventions)
 influxdb_version: 0.9.4.1
+
+# NOTE: Since Ansible uses Python on the backend, all boolean values are capitalized when being rendered (which is not valid TOML).
+# To get around this, make sure you quote any boolean values (true -> "true") to ensure correct formatting (for template variables).
 
 # InfluxDB configuration file options
 disable_reporting: "true"
