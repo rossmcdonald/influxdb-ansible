@@ -37,22 +37,22 @@
 
   - name: Overwrite default configuration with parameterized template
     template: src=influxdb.conf.j2 dest=/etc/opt/influxdb/influxdb.conf force=yes backup=yes owner=influxdb group=influxdb mode=0744
-    
+
   - name: Start the InfluxDB service
     service: name=influxdb state=started enabled=yes
 
-  # TODO: Don't pause if the service was already started
   - name: Give the InfluxDB service a few seconds to fully start
-    pause: seconds=5
+    pause: seconds=3
 
   - name: Check to see which databases already exist
     command: /opt/influxdb/influx -execute 'show databases'
     register: db_listing
+    when: add_demo_data
 
   # Todo: Parameterize database name creation (instead of hardcoding)
   - name: Create sample database
     command: /opt/influxdb/influx -execute 'CREATE DATABASE my_sample_db'
-    when: db_listing.stdout.find("my_sample_db") == -1
+    when: add_demo_data and db_listing.stdout.find("my_sample_db") == -1
 
   - name: Load some test data into sample database
     uri:
@@ -60,4 +60,12 @@
       method: POST
       body: "random_ints,host=server_{{ 10 | random }} value={{ 100 | random }}"
       status_code: 204
-    with_sequence: start=1 end=10
+    with_sequence: start=1 end=100
+    when: add_demo_data
+
+  # TODO: This relies on the servers being numbered in ascending order from 1 (1 being master).
+  - name: Cluster InfluxDB non-primary servers
+    template: src=etc/default/influxdb.j2 dest=/etc/default/influxdb force=yes backup=yes owner=root group=root mode=0644
+    notify:
+      - restart influxdb
+    when: clustering_enabled and ansible_hostname|last != '1'

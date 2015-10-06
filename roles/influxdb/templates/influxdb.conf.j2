@@ -17,7 +17,7 @@ reporting-disabled = {{ disable_reporting }}
 
 [meta]
   dir = "{{ meta_dir }}"
-  hostname = "{{ ansible_hostname }}"
+  hostname = "{{ ansible_all_ipv4_addresses|last }}"
   bind-address = ":{{ meta_port }}"
   retention-autocreate = {{ meta_retention_autocreate }}
   election-timeout = "{{ meta_election_timeout }}"

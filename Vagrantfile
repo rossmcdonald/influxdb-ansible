@@ -14,11 +14,11 @@ Vagrant.configure(2) do |config|
     config.vm.define "influx#{machine_id}" do |machine|
       machine.vm.hostname = "influx#{machine_id}"
       # machine.vm.network "private_network", ip: "10.0.3.#{1+machine_id}", virtualbox__intnet: true
-      machine.vm.network "private_network", type: "dhcp"
+      machine.vm.network "public_network", :bridge => 'en0: Wi-Fi (AirPort)'
       
       # # InfluxDB ports
-      # config.vm.network :forwarded_port, guest: 8083, host: 8082+machine_id
-      # config.vm.network :forwarded_port, guest: 8086, host: 8085+machine_id
+      # config.vm.network :forwarded_port, guest: 8083, host: 8083+machine_id
+      # config.vm.network :forwarded_port, guest: 8086, host: 8086+machine_id
       
       # Grafana ports
       # config.vm.network :forwarded_port, guest: 3000, host: 3000
