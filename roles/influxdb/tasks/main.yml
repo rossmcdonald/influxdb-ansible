@@ -7,33 +7,26 @@
       - curl
     when: ansible_os_family == "Debian"
 
-  # NOTE: This check assumes the /opt/influxdb/influx is a symlink
-  - name: Check to make sure Influx isnt already present
-    stat: path=/opt/influxdb/influx
-    register: influx_installed
+  - name: Import InfluxDB GPG signing key (Debian)
+    apt_key: url=https://repos.influxdata.com/influxdb.key state=present
+    when: ansible_os_family == "Debian"
 
-  - name: Download InfluxDB package (Debian)
-    command: curl -o /tmp/influx.deb http://influxdb.s3.amazonaws.com/influxdb_{{ influxdb_version }}_amd64.deb
-    args:
-      creates: /tmp/influx.deb
-    when: ansible_os_family == "Debian" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
-
-  # TODO: don't hardcode the RPM version
-  - name: Download InfluxDB package (RHEL)
-    command: curl -o /tmp/influx.rpm http://influxdb.s3.amazonaws.com/influxdb-0.9.4.1-1.x86_64.rpm
-    # command: curl -o /tmp/influx.rpm http://get.influxdb.org.s3.amazonaws.com/influxdb-0.8.9-1.x86_64.rpm
-    args:
-      creates: /tmp/influx.rpm
-    when: ansible_os_family == "RedHat" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
+  - name: Add InfluxDB repository (Debian)
+    apt_repository: repo='deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_channel }}' state=present
+    when: ansible_os_family == "Debian"
+    
+  - name: Add InfluxDB repository (RHEL)
+    apt_repository: repo='deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_channel }}' state=present
+    when: ansible_os_family == "RedHat"
 
   - name: Install InfluxDB packages (Debian)
-    apt: deb=/tmp/influx.deb state=present
-    when: ansible_os_family == "Debian" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
+    apt: name=influxdb state=present
+    when: ansible_os_family == "Debian"
 
   # TODO: RHEL-variant systems are migrating to DNF, so this might fail on newer machines. Need logic to account for that.
   - name: Install InfluxDB packages (RHEL)
-    yum: name=/tmp/influx.rpm state=present
-    when: ansible_os_family == "RedHat" and (influx_installed.stat.islnk is not defined or influx_installed.stat.islnk == False)
+    yum: name=influxdb state=present
+    when: ansible_os_family == "RedHat"
 
   - name: Overwrite default configuration with parameterized template
     template: src=influxdb.conf.j2 dest=/etc/opt/influxdb/influxdb.conf force=yes backup=yes owner=influxdb group=influxdb mode=0744
