@@ -1,3 +1,6 @@
 ---
+- name: purge peers
+  file: path=/var/opt/influxdb/meta/peers.json state=absent
+
 - name: restart influxdb
   service: name=influxdb state=restarted

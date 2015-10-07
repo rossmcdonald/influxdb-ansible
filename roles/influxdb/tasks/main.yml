@@ -67,5 +67,6 @@
   - name: Cluster InfluxDB non-primary servers
     template: src=etc/default/influxdb.j2 dest=/etc/default/influxdb force=yes backup=yes owner=root group=root mode=0644
     notify:
+      - purge peers
       - restart influxdb
     when: clustering_enabled and ansible_hostname|last != '1'

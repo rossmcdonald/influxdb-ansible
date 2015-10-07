@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
   # config.vm.box = "puppetlabs/centos-6.6-64-nocm"
   # config.vm.box = "hansode/centos-6.5-x86_64"
 
-  BOX_COUNT = 3
+  BOX_COUNT = 1
   (1..BOX_COUNT).each do |machine_id|
     config.vm.define "influx#{machine_id}" do |machine|
       machine.vm.hostname = "influx#{machine_id}"
