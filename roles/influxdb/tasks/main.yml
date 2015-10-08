@@ -56,10 +56,12 @@
     with_sequence: start=1 end=100
     when: add_demo_data
 
-  # TODO: This relies on the servers being numbered in ascending order from 1 (1 being master).
+  # TODO: This relies on the servers being numbered in ascending order from 1 (1 being master)
   - name: Cluster InfluxDB non-primary servers
     template: src=etc/default/influxdb.j2 dest=/etc/default/influxdb force=yes backup=yes owner=root group=root mode=0644
     notify:
+      - purge metaid
+      - purge raftdb
       - purge peers
       - restart influxdb
-    when: clustering_enabled and ansible_hostname|last != '1'
+    when: clustering_enabled
