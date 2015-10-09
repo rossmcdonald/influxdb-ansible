@@ -15,8 +15,8 @@
     apt_repository: repo='deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_channel }}' state=present
     when: ansible_os_family == "Debian"
     
-  - name: Add InfluxDB repository (RHEL)
-    apt_repository: repo='deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_channel }}' state=present
+  - name: Add InfluxDB repository file (RHEL)
+    template: src=etc/yum.repos.d/influxdb.repo.j2 dest=/etc/yum.repos.d/influxdb.repo force=yes backup=yes
     when: ansible_os_family == "RedHat"
 
   - name: Install InfluxDB packages (Debian)
