@@ -51,7 +51,7 @@
     uri:
       url: http://localhost:8086/write?db=my_sample_db
       method: POST
-      body: "random_ints,host=server_{{ 10 | random }} value={{ 100 | random }}"
+      body: "random_ints,host=server_{{ 10 | random }},az=US{{ 5 | random }} value={{ 100 | random }}"
       status_code: 204
     with_sequence: start=1 end=100
     when: add_demo_data

@@ -6,7 +6,7 @@ add_demo_data: false
 clustering_enabled: false
 
 # InfluxDB version channel to use (stable|unstable)
-influxdb_channel: stable
+influxdb_channel: nightly
 
 # NOTE: Since Ansible uses Python on the backend, all boolean values are capitalized when being rendered (which is not valid TOML).
 # To get around this, make sure you quote any boolean values (true -> "true") to ensure correct formatting (for template variables).
@@ -27,6 +27,7 @@ meta_cluster_tracing: "false"
 
 ## Data Settings
 data_dir: /var/opt/influxdb/data
+data_engine: "tsm1"
 data_max_wal_size: 104857600
 data_wal_flush_interval: 10m0s
 data_wal_partition_flush_delay: 2s
