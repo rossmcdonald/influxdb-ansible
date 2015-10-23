@@ -59,7 +59,7 @@ function generate_point {
 	line="$line${TAG_VALUES[$(( $RANDOM % $TAG_VALUE_COUNT ))]},"
     done
     line="${line%?}" # drop last value (a comma)
-    line="$line value=$(( $RANDOM % $VALUE_MOD ))"
+    line="$line value=$(( $RANDOM % $VALUE_MOD )) $(date +%s%N)"
     # test $debug && echo -e "\tPoint generated: $line"
     echo "$line"
 }
@@ -70,12 +70,9 @@ for i in $(seq 1 $WRITE_DURATION); do
     POINTS=""
     for j in $(seq 0 $(( $WRITE_BATCH_SIZE - 1 )) ); do
 	p="$(generate_point)\n"
-	# test $j -eq 0 -a $WRITE_BATCH_SIZE -eq 1 && p="${p%?}" && p="${p%?}"
 	POINTS="$POINTS$p"
     done
-    # test $WRITE_BATCH_SIZE > 1 && POINTS="${POINTS%?}" && POINTS="${POINTS%?}"
     test $debug && echo -e "Generated $WRITE_BATCH_SIZE points."
-    # test $debug && echo -e "Generated $WRITE_BATCH_SIZE points:\n${POINTS[*]}"
     echo -e "Writing $WRITE_BATCH_SIZE points to http://$HOSTNAME:$PORT/write?db=$DATABASE"
     curl -v -XPOST "http://$HOSTNAME:$PORT/write?db=$DATABASE" --data-binary "$(printf "$POINTS")" &>/dev/null
     test $? -eq 0 || echo "Received bad code ($?) from POST."
